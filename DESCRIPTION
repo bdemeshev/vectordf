@@ -1,0 +1,15 @@
+Package: vectordf
+Type: Package
+Title: vectordf-package: functions for distributions with vector degrees of
+    freedom (t, gamma)
+Version: 0.1
+Date: 2015-01-02
+Author: Boris Demeshev
+Maintainer: Boris Demeshev <boris.demeshev@gmail.com>
+Imports:
+    dplyr (>= 0.3),
+    mvtnorm (>= 1.0)
+Description: vectordf-package: functions for distributions with vector degrees
+    of freedom (t, gamma)
+License: MIT
+LazyData: true
