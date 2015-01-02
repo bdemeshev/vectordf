@@ -11,9 +11,11 @@ rtdf(n = 1, M = matrix(0), B = diag(ncol(M)), a = rep(1, nrow(M)),
 
 \item{M}{matrix of expected values (r x s)}
 
-\item{a}{vector of degrees of freedom (r x 1)}
+\item{B}{among-column scale covariance matrix for underlying standard normal (s x s)}
 
-\item{A}{scale matrix (r x r)}
+\item{a}{vector of degrees of freedom for underlying gamma Bellman distribution (r x 1)}
+
+\item{A}{scale matrix for underlying gamma Bellman distribution (r x r)}
 }
 \value{
 array of generated matrix t (n x r x s)

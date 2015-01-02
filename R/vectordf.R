@@ -109,8 +109,9 @@ rgammadf <- function(n=1, a = 1, A = diag(length(a))){
 #' generalisation of Algorithm by Alexey Balaev
 #'
 #' @param n number of draws from matrix t distribution with vector degrees of freedom
-#' @param a vector of degrees of freedom (r x 1)
-#' @param A scale matrix (r x r)
+#' @param a vector of degrees of freedom for underlying gamma Bellman distribution (r x 1)
+#' @param A scale matrix for underlying gamma Bellman distribution (r x r)
+#' @param B among-column scale covariance matrix for underlying standard normal (s x s)
 #' @param M matrix of expected values (r x s)
 #' @export
 #' @return array of generated matrix t (n x r x s)
