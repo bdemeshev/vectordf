@@ -80,8 +80,14 @@ rmatnorm <- function(n=1, M = matrix(0), U = diag(nrow(M)), V = diag(ncol(M))){
 #' X <- rgammadf(n = 5, Mu = matrix(0, nrow=3, ncol=2))
 #' X
 rgammadf <- function(n=1, a = 1, A = diag(length(a))){
-  L0 <- ...
+  r <- nrow(M)
+  s <- ncol(M)
   
+  # Balaev, phd thesis, page 116  
+  L0 <- matrix(0, nrow=r, ncol=r)
+  L0[lower.tir(L0)] <- rnorm(r*(r-1)/2, mean=0, sd=1/sqrt(2))
+  diag(L0) <- 
+    
   P <- t(chol(A))
   Pinv <- solve(P)
   
@@ -114,7 +120,9 @@ rtdf <- function(n = 1, M = matrix(0), B = diag(ncol(M)),
   s <- ncol(M)
   
   # Balaev, phd thesis, page 116
-  L0 <- ...
+  L0 <- matrix(0, nrow=r, ncol=r)
+  L0[lower.tir(L0)] <- rnorm(r*(r-1)/2, mean=0, sd=1/sqrt(2))
+  diag(L0) <- 
 
   # Shvedov, WP2/2010/01, page 8
   vecZ <- rmvnorm(n=1, mean = rep(0, r*s), sigma = kronecker(diag(r), B))
