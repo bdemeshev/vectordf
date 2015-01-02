@@ -52,7 +52,7 @@ mc_sim <- function(trans, N=1, start=1) {
 #' @export
 #' @return array of generated matrix normal (n x r x s)
 #' @examples
-#' X <- rmatnorm(n = 5, Mu = matrix(0, nrow=3, ncol=2))
+#' X <- rmatnorm(n = 5, M = matrix(0, nrow=3, ncol=2))
 #' X
 rmatnorm <- function(n=1, M = matrix(0), U = diag(nrow(M)), V = diag(ncol(M))){
   # M, U, V should be matrices!!! (if scalar, then 1x1)
@@ -77,7 +77,7 @@ rmatnorm <- function(n=1, M = matrix(0), U = diag(nrow(M)), V = diag(ncol(M))){
 #' @export
 #' @return array of generated matrix gamma (n x r x r)
 #' @examples
-#' X <- rgammadf(n = 5, Mu = matrix(0, nrow=3, ncol=2))
+#' X <- rgammadf(n = 5, a = c(1, 2, 3)) 
 #' X
 rgammadf <- function(n=1, a = rep(1,2), A = diag(length(a))){
   r <- length(a)
@@ -116,7 +116,7 @@ rgammadf <- function(n=1, a = rep(1,2), A = diag(length(a))){
 #' @export
 #' @return array of generated matrix t (n x r x s)
 #' @examples
-#' X <- rtdf(n = 5, M = matrix(0, nrow=3, ncol=2))
+#' X <- rtdf(n = 5, a = c(1, 2, 3))
 #' X
 rtdf <- function(n = 1, M = matrix(0, nrow=length(a), ncol=ncol(B)), B = diag(1), 
                  a = rep(1, 2), A = diag(length(a)) ){
@@ -156,14 +156,14 @@ rtdf <- function(n = 1, M = matrix(0, nrow=length(a), ncol=ncol(B)), B = diag(1)
 #' @export
 #' @return scalar, density at the point X
 #' @examples
-#' d <- dmatnorm(X = matrix(1, nrow=3, ncol=2), Mu = matrix(0, nrow=3, ncol=2))
+#' d <- dmatnorm(X = matrix(1, nrow=3, ncol=2), M = matrix(0, nrow=3, ncol=2))
 #' d
-dmatnorm <- function(X, Mu = matrix(0), U = diag(nrow(Mu)), V = diag(ncol(Mu))){
+dmatnorm <- function(X, M = matrix(0), U = diag(nrow(M)), V = diag(ncol(M))){
   # Mu, U, V should be matrices!!! (if scalar, then 1x1)
-  r <- nrow(Mu)
-  s <- ncol(Mu)
+  r <- nrow(M)
+  s <- ncol(M)
   
-  X0 <- X - Mu
+  X0 <- X - M
   
   nominator <- exp(-0.5*sum(diag(solve(V) %*% t(X0) %*% solve(U) %*% X0 )))
   denominator <- (2*pi)^(r*s/2)*det(V)^(r/2)*det(U)^(s/2)
@@ -188,7 +188,7 @@ dmatnorm <- function(X, Mu = matrix(0), U = diag(nrow(Mu)), V = diag(ncol(Mu))){
 #' @export
 #' @return array of generated matrix t (n x r x s)
 #' @examples
-#' d <- dtdf(X = matrix(1, nrow=3, ncol=2), Mu = matrix(0, nrow=3, ncol=2))
+#' d <- dtdf(X = matrix(1, nrow=3, ncol=2), M = matrix(0, nrow=3, ncol=2))
 #' d
 dtdf <- function(X, M = matrix(0), B = diag(ncol(M)), 
                  a = rep(1, nrow(M)), A = diag(nrow(M)) ){
