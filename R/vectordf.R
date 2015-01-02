@@ -84,7 +84,7 @@ rgammadf <- function(n=1, a = 1, A = diag(length(a))){
   
   # Balaev, phd thesis, page 116  
   L0 <- matrix(0, nrow=r, ncol=r)
-  L0[lower.tir(L0)] <- rnorm(r*(r-1)/2, mean=0, sd=1/sqrt(2))
+  L0[lower.tri(L0)] <- rnorm(r*(r-1)/2, mean=0, sd=1/sqrt(2))
   
   d <- a[r:1] - r + 1:r # a = 1, p = 2
   diag(L0) <- flexsurv::rgengamma(n = r, mu = (log(d)-log(2))/2, 
@@ -124,7 +124,7 @@ rtdf <- function(n = 1, M = matrix(0), B = diag(ncol(M)),
   
   # Balaev, phd thesis, page 116
   L0 <- matrix(0, nrow=r, ncol=r)
-  L0[lower.tir(L0)] <- rnorm(r*(r-1)/2, mean=0, sd=1/sqrt(2))
+  L0[lower.tri(L0)] <- rnorm(r*(r-1)/2, mean=0, sd=1/sqrt(2))
 
   d <- a[r:1] - r + 1:r # a = 1, p = 2
   diag(L0) <- flexsurv::rgengamma(n = r, mu = (log(d)-log(2))/2, 
