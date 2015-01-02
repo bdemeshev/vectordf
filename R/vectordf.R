@@ -3,7 +3,7 @@
 #' @name vectordf
 #' @docType package
 #' @author Boris Demeshev 
-#' @import dplyr mvtnorm
+#' @import dplyr mvtnorm flexsurv
 NULL
 
 #' Generate Discrete Markov Chain
@@ -80,13 +80,16 @@ rmatnorm <- function(n=1, M = matrix(0), U = diag(nrow(M)), V = diag(ncol(M))){
 #' X <- rgammadf(n = 5, Mu = matrix(0, nrow=3, ncol=2))
 #' X
 rgammadf <- function(n=1, a = 1, A = diag(length(a))){
-  r <- nrow(M)
-  s <- ncol(M)
+  r <- length(a)
   
   # Balaev, phd thesis, page 116  
   L0 <- matrix(0, nrow=r, ncol=r)
   L0[lower.tir(L0)] <- rnorm(r*(r-1)/2, mean=0, sd=1/sqrt(2))
-  diag(L0) <- 
+  
+  d <- a[r:1] - r + 1:r # a = 1, p = 2
+  diag(L0) <- flexsurv::rgengamma(n = r, mu = (log(d)-log(2))/2, 
+                                  sigma = 1/sqrt(d*2),
+                                  Q = sqrt(2/d))
     
   P <- t(chol(A))
   Pinv <- solve(P)
@@ -122,8 +125,12 @@ rtdf <- function(n = 1, M = matrix(0), B = diag(ncol(M)),
   # Balaev, phd thesis, page 116
   L0 <- matrix(0, nrow=r, ncol=r)
   L0[lower.tir(L0)] <- rnorm(r*(r-1)/2, mean=0, sd=1/sqrt(2))
-  diag(L0) <- 
 
+  d <- a[r:1] - r + 1:r # a = 1, p = 2
+  diag(L0) <- flexsurv::rgengamma(n = r, mu = (log(d)-log(2))/2, 
+                                  sigma = 1/sqrt(d*2),
+                                  Q = sqrt(2/d))
+  
   # Shvedov, WP2/2010/01, page 8
   vecZ <- rmvnorm(n=1, mean = rep(0, r*s), sigma = kronecker(diag(r), B))
   Z <- matrix(vecZ, nrow=r)

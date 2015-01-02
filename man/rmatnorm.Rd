@@ -3,12 +3,12 @@
 \alias{rmatnorm}
 \title{Generate Matrix Normal distribution}
 \usage{
-rmatnorm(n = 1, Mu = matrix(0), U = diag(nrow(Mu)), V = diag(ncol(Mu)))
+rmatnorm(n = 1, M = matrix(0), U = diag(nrow(M)), V = diag(ncol(M)))
 }
 \arguments{
 \item{n}{number of draws from matrix normal distribution}
 
-\item{Mu}{matrix of expected values (r x s)}
+\item{M}{matrix of expected values (r x s)}
 
 \item{U}{among-row scale covariance matrix (r x r)}
 

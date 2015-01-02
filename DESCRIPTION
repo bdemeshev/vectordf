@@ -8,7 +8,8 @@ Author: Boris Demeshev
 Maintainer: Boris Demeshev <boris.demeshev@gmail.com>
 Imports:
     dplyr (>= 0.3),
-    mvtnorm (>= 1.0)
+    mvtnorm (>= 1.0),
+    flexsurv (>= 0.5)
 Description: vectordf-package: functions for distributions with vector degrees
     of freedom (t, gamma)
 License: MIT
