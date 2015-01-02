@@ -3,7 +3,7 @@
 \alias{rgammadf}
 \title{Generate gamma distribution with vector degrees of freedom}
 \usage{
-rgammadf(n = 1, a = 1, A = diag(length(a)))
+rgammadf(n = 1, a = rep(1, 2), A = diag(length(a)))
 }
 \arguments{
 \item{n}{number of draws from matrix gamma distribution with vector degrees of freedom}

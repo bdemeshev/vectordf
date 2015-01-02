@@ -79,14 +79,14 @@ rmatnorm <- function(n=1, M = matrix(0), U = diag(nrow(M)), V = diag(ncol(M))){
 #' @examples
 #' X <- rgammadf(n = 5, Mu = matrix(0, nrow=3, ncol=2))
 #' X
-rgammadf <- function(n=1, a = 1, A = diag(length(a))){
+rgammadf <- function(n=1, a = rep(1,2), A = diag(length(a))){
   r <- length(a)
   
   # Balaev, phd thesis, page 116  
   L0 <- matrix(0, nrow=r, ncol=r)
   L0[lower.tri(L0)] <- rnorm(r*(r-1)/2, mean=0, sd=1/sqrt(2))
   
-  d <- a[r:1] - r + 1:r # a = 1, p = 2
+  d <- 2*a[r:1] - r + 1:r # a = 1, p = 2
   diag(L0) <- flexsurv::rgengamma(n = r, mu = (log(d)-log(2))/2, 
                                   sigma = 1/sqrt(d*2),
                                   Q = sqrt(2/d))
@@ -118,8 +118,8 @@ rgammadf <- function(n=1, a = 1, A = diag(length(a))){
 #' @examples
 #' X <- rtdf(n = 5, M = matrix(0, nrow=3, ncol=2))
 #' X
-rtdf <- function(n = 1, M = matrix(0), B = diag(ncol(M)), 
-                 a = rep(1, nrow(M)), A = diag(nrow(M)) ){
+rtdf <- function(n = 1, M = matrix(0, nrow=length(a), ncol=ncol(B)), B = diag(1), 
+                 a = rep(1, 2), A = diag(length(a)) ){
   r <- nrow(M)
   s <- ncol(M)
   
@@ -127,7 +127,7 @@ rtdf <- function(n = 1, M = matrix(0), B = diag(ncol(M)),
   L0 <- matrix(0, nrow=r, ncol=r)
   L0[lower.tri(L0)] <- rnorm(r*(r-1)/2, mean=0, sd=1/sqrt(2))
 
-  d <- a[r:1] - r + 1:r # a = 1, p = 2
+  d <- 2*a[r:1] - r + 1:r # a = 1, p = 2
   diag(L0) <- flexsurv::rgengamma(n = r, mu = (log(d)-log(2))/2, 
                                   sigma = 1/sqrt(d*2),
                                   Q = sqrt(2/d))
@@ -172,3 +172,35 @@ dmatnorm <- function(X, Mu = matrix(0), U = diag(nrow(Mu)), V = diag(ncol(Mu))){
 }
 
 
+#' Density of matrix t distribution with vector degrees of freedom
+#'
+#' Density of matrix t distribution with vector degrees of freedom
+#'
+#' Density of matrix t distribution with vector degrees of freedom. The distribution
+#' is described in Shvedov 
+#' generalisation of Algorithm by Alexey Balaev
+#'
+#' @param X matrix-point, argument for density function
+#' @param a vector of degrees of freedom for underlying gamma Bellman distribution (r x 1)
+#' @param A scale matrix for underlying gamma Bellman distribution (r x r)
+#' @param B among-column scale covariance matrix for underlying standard normal (s x s)
+#' @param M matrix of expected values (r x s)
+#' @export
+#' @return array of generated matrix t (n x r x s)
+#' @examples
+#' d <- dtdf(X = matrix(1, nrow=3, ncol=2), Mu = matrix(0, nrow=3, ncol=2))
+#' d
+dtdf <- function(X, M = matrix(0), B = diag(ncol(M)), 
+                 a = rep(1, nrow(M)), A = diag(nrow(M)) ){
+  
+  P <- t(chol(A))
+  Z <- solve(P) %*% (X - M) # standartized matrix t distribution
+  
+  
+  r <- nrow(M)
+  s <- ncol(M)
+  
+  message("Not yet implemented")
+  
+  return(FALSE)  
+}
