@@ -46,7 +46,7 @@ mc_sim <- function(trans, N=1, start=1) {
 #' Generate Matrix Normal distribution using Wikipedia notations. Default is just scalar N(0,1).
 #'
 #' @param n number of draws from matrix normal distribution
-#' @param Mu matrix of expected values (r x s)
+#' @param M matrix of expected values (r x s)
 #' @param U among-row scale covariance matrix (r x r)
 #' @param V among-column scale covariance matrix (s x s)
 #' @export
@@ -54,8 +54,105 @@ mc_sim <- function(trans, N=1, start=1) {
 #' @examples
 #' X <- rmatnorm(n = 5, Mu = matrix(0, nrow=3, ncol=2))
 #' X
-rmatnorm <- function(n=1, Mu = matrix(0), U = diag(nrow(Mu)), V = diag(ncol(Mu))){
-  # Mu, U, V should be matrices!!! (if scalar, then 1x1)
-  mn <- rmvnorm(n = n, mean = as.vector(Mu), sigma = kronecker(V,U))
-  return(array(mn, dim=c(n, nrow(Mu), ncol(Mu))))
+rmatnorm <- function(n=1, M = matrix(0), U = diag(nrow(M)), V = diag(ncol(M))){
+  # M, U, V should be matrices!!! (if scalar, then 1x1)
+  mn <- rmvnorm(n = n, mean = as.vector(M), sigma = kronecker(V,U))
+  return(array(mn, dim=c(n, nrow(M), ncol(M))))
 }
+
+
+
+
+#' Generate gamma distribution with vector degrees of freedom
+#'
+#' Generate gamma distribution with vector degrees of freedom
+#'
+#' Generate gamma distribution with vector degrees of freedom. The distribution
+#' is described in Shvedov 
+#' Algorithm by Alexey Balaev
+#'
+#' @param n number of draws from matrix gamma distribution with vector degrees of freedom
+#' @param a vector of degrees of freedom (r x 1)
+#' @param A scale matrix (r x r)
+#' @export
+#' @return array of generated matrix gamma (n x r x r)
+#' @examples
+#' X <- rgammadf(n = 5, Mu = matrix(0, nrow=3, ncol=2))
+#' X
+rgammadf <- function(n=1, a = 1, A = diag(length(a))){
+  L0 <- ...
+  
+  P <- t(chol(A))
+  Pinv <- solve(P)
+  
+  W0 <- t(L0) %*% L0 # gamma-Bellman (a, I)
+  W <- t(Pinv) %*% W0 %*% Pinv # gamma-Bellman (a, A)
+  return(W)
+}
+
+
+#' Generate t distribution with vector degrees of freedom
+#'
+#' Generate t distribution with vector degrees of freedom
+#'
+#' Generate t distribution with vector degrees of freedom. The distribution
+#' is described in Shvedov 
+#' generalisation of Algorithm by Alexey Balaev
+#'
+#' @param n number of draws from matrix t distribution with vector degrees of freedom
+#' @param a vector of degrees of freedom (r x 1)
+#' @param A scale matrix (r x r)
+#' @param M matrix of expected values (r x s)
+#' @export
+#' @return array of generated matrix t (n x r x s)
+#' @examples
+#' X <- rtdf(n = 5, M = matrix(0, nrow=3, ncol=2))
+#' X
+rtdf <- function(n = 1, M = matrix(0), B = diag(ncol(M)), 
+                 a = rep(1, nrow(M)), A = diag(nrow(M)) ){
+  r <- nrow(M)
+  s <- ncol(M)
+  
+  # Balaev, phd thesis, page 116
+  L0 <- ...
+
+  # Shvedov, WP2/2010/01, page 8
+  vecZ <- rmvnorm(n=1, mean = rep(0, r*s), sigma = kronecker(diag(r), B))
+  Z <- matrix(vecZ, nrow=r)
+  
+  P <- t(chol(A))
+  U <- P %*% solve(L0) %*% Z + M
+  
+  return(U)
+}
+
+
+#' Matrix Normal density function
+#'
+#' Matrix Normal density function
+#'
+#' Matrix Normal density function 
+#'
+#' @param X matrix-point, argument for density function
+#' @param Mu matrix of expected values (r x s)
+#' @param U among-row scale covariance matrix (r x r)
+#' @param V among-column scale covariance matrix (s x s)
+#' @export
+#' @return scalar, density at the point X
+#' @examples
+#' d <- dmatnorm(X = matrix(1, nrow=3, ncol=2), Mu = matrix(0, nrow=3, ncol=2))
+#' d
+dmatnorm <- function(X, Mu = matrix(0), U = diag(nrow(Mu)), V = diag(ncol(Mu))){
+  # Mu, U, V should be matrices!!! (if scalar, then 1x1)
+  r <- nrow(Mu)
+  s <- ncol(Mu)
+  
+  X0 <- X - Mu
+  
+  nominator <- exp(-0.5*sum(diag(solve(V) %*% t(X0) %*% solve(U) %*% X0 )))
+  denominator <- (2*pi)^(r*s/2)*det(V)^(r/2)*det(U)^(s/2)
+    
+  return(nominator/denominator)
+}
+
+

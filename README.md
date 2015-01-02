@@ -23,4 +23,5 @@ X <- rmatnorm(n = 5, Mu = matrix(c(0,0,1,-1), nrow=2))
 
 
 Планы: 
-* дописать функции плотности
+* дописать функции плотности для t, gamma-Bellman
+* n>1 для t, gamma-Bellman
