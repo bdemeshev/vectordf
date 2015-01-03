@@ -84,7 +84,7 @@ rgammadf <- function(n=1, a = rep(1,2), A = diag(length(a))){
 
   ans <- array(0, dim = c(n, r, r))
   # Balaev, phd thesis, page 116  
-  P <- t(chol(A))
+  P <- t(chol(A)) # lower triangular matrix
   Pinv <- solve(P)
   
   L0 <- matrix(0, nrow=r, ncol=r)
@@ -127,7 +127,7 @@ rtdf <- function(n = 1, M = matrix(0, nrow=length(a), ncol=ncol(B)), B = diag(1)
   r <- nrow(M)
   s <- ncol(M)
   ans <- array(0, dim = c(n, r, s))
-  P <- t(chol(A))
+  P <- t(chol(A)) # lower triangular matrix
   
   L0 <- matrix(0, nrow=r, ncol=r)
   for (i in 1:n) {
