@@ -88,11 +88,12 @@ rgammadf <- function(n=1, a = rep(1,2), A = diag(length(a))){
   Pinv <- solve(P)
   
   L0 <- matrix(0, nrow=r, ncol=r)
+  d <- 2*a[r:1] - r + 1:r # gen-gamma pars: a = 1, p = 2, d=(d_1, d_2, ..., d_r)
+  
   
   for (i in 1:n) {
     L0[lower.tri(L0)] <- rnorm(r*(r-1)/2, mean=0, sd=1/sqrt(2))
     
-    d <- 2*a[r:1] - r + 1:r # a = 1, p = 2
     diag(L0) <- flexsurv::rgengamma(n = r, mu = (log(d)-log(2))/2, 
                                     sigma = 1/sqrt(d*2),
                                     Q = sqrt(2/d))
@@ -122,6 +123,10 @@ rgammadf <- function(n=1, a = rep(1,2), A = diag(length(a))){
 #' @examples
 #' X <- rtdf(n = 5, a = c(1, 2, 3))
 #' X
+#' tt <- rtdf(n = 10^5, a=1.5)*sqrt(1.5) # one dimensional t with df=3
+#' tt0 <- rt(n = 10^5, df=3)
+#' quantile(tt0, probs=c(0.001,0.1,0.3,0.7,0.9,0.999))
+#' quantile(tt, probs=c(0.001,0.1,0.3,0.7,0.9,0.999))
 rtdf <- function(n = 1, M = matrix(0, nrow=length(a), ncol=ncol(B)), B = diag(1), 
                  a = rep(1, 2), A = diag(length(a)) ){
   r <- nrow(M)
@@ -130,17 +135,19 @@ rtdf <- function(n = 1, M = matrix(0, nrow=length(a), ncol=ncol(B)), B = diag(1)
   P <- t(chol(A)) # lower triangular matrix
   
   L0 <- matrix(0, nrow=r, ncol=r)
+  d <- 2*a[r:1] - r + 1:r # gen-gamma pars: a = 1, p = 2, d=(d_1, d_2, ..., d_r)
+  
   for (i in 1:n) {
     # Balaev, phd thesis, page 116    
     L0[lower.tri(L0)] <- rnorm(r*(r-1)/2, mean=0, sd=1/sqrt(2))
     
-    d <- 2*a[r:1] - r + 1:r # a = 1, p = 2
+    
     diag(L0) <- flexsurv::rgengamma(n = r, mu = (log(d)-log(2))/2, 
                                     sigma = 1/sqrt(d*2),
                                     Q = sqrt(2/d))
     
     # Shvedov, WP2/2010/01, page 8
-    vecZ <- rmvnorm(n=1, mean = rep(0, r*s), sigma = kronecker(diag(r), B))
+    vecZ <- mvtnorm::rmvnorm(n=1, mean = rep(0, r*s), sigma = kronecker(diag(r), B))
     Z <- matrix(vecZ, nrow=r)
     
     

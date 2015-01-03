@@ -31,5 +31,9 @@ generalisation of Algorithm by Alexey Balaev
 \examples{
 X <- rtdf(n = 5, a = c(1, 2, 3))
 X
+tt <- rtdf(n = 10^5, a=1.5)*sqrt(1.5) # one dimensional t with df=3
+tt0 <- rt(n = 10^5, df=3)
+quantile(tt0, probs=c(0.001,0.1,0.3,0.7,0.9,0.999))
+quantile(tt, probs=c(0.001,0.1,0.3,0.7,0.9,0.999))
 }
 
