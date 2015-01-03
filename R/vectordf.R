@@ -83,9 +83,13 @@ rgammadf <- function(n=1, a = rep(1,2), A = diag(length(a))){
   r <- length(a)
 
   ans <- array(0, dim = c(n, r, r))
-  # Balaev, phd thesis, page 116  
+  
+  # some precalculations to avoid them in cycle
   P <- t(chol(A)) # lower triangular matrix
   Pinv <- solve(P)
+  tPinv <- t(Pinv)
+
+  # Balaev, phd thesis, page 116  
   
   L0 <- matrix(0, nrow=r, ncol=r)
   d <- 2*a[r:1] - r + 1:r # gen-gamma pars: a = 1, p = 2, d=(d_1, d_2, ..., d_r)
@@ -102,7 +106,7 @@ rgammadf <- function(n=1, a = rep(1,2), A = diag(length(a))){
     diag(L0) <- sqrt(rgamma(n = r, shape = d/2, rate = 1))
     
     W0 <- t(L0) %*% L0 # gamma-Bellman (a, I)
-    ans[i,,] <- t(Pinv) %*% W0 %*% Pinv # gamma-Bellman (a, A)
+    ans[i,,] <- tPinv %*% W0 %*% Pinv # gamma-Bellman (a, A)
   }
   return(ans)
 }
@@ -140,9 +144,15 @@ rtdf <- function(n = 1, M = matrix(0, nrow=length(a), ncol=ncol(B)), B = diag(1)
   L0 <- matrix(0, nrow=r, ncol=r)
   d <- 2*a[r:1] - r + 1:r # gen-gamma pars: a = 1, p = 2, d=(d_1, d_2, ..., d_r)
   
+  I_kron_B <- kronecker(diag(r), B)
+  sd_sq2 <- 1/sqrt(2) # constant equal to 1/sqrt(2), for faster cycle
+  
+  # insides of rmvnorm:
+  R <- kronecker(diag(r), chol(B))
+  
   for (i in 1:n) {
     # Balaev, phd thesis, page 116    
-    L0[lower.tri(L0)] <- rnorm(r*(r-1)/2, mean=0, sd=1/sqrt(2))
+    L0[lower.tri(L0)] <- rnorm(r*(r-1)/2, mean=0, sd=sd_sq2)
     
     
     # diag(L0) <- flexsurv::rgengamma(n = r, mu = (log(d)-log(2))/2, 
@@ -153,7 +163,9 @@ rtdf <- function(n = 1, M = matrix(0, nrow=length(a), ncol=ncol(B)), B = diag(1)
     diag(L0) <- sqrt(rgamma(n = r, shape = d/2, rate = 1))
     
     # Shvedov, WP2/2010/01, page 8
-    vecZ <- mvtnorm::rmvnorm(n=1, mean = rep(0, r*s), sigma = kronecker(diag(r), B))
+    # vecZ <- mvtnorm::rmvnorm(n=1, mean = rep(0, r*s), sigma = I_kron_B)
+    vecZ <- rnorm(r*s) %*% R # insides of rmvnorm
+    
     Z <- matrix(vecZ, nrow=r)
     
     
