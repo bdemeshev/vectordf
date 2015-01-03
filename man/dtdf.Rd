@@ -3,8 +3,8 @@
 \alias{dtdf}
 \title{Density of matrix t distribution with vector degrees of freedom}
 \usage{
-dtdf(X, M = matrix(0), B = diag(ncol(M)), a = rep(1, nrow(M)),
-  A = diag(nrow(M)))
+dtdf(X, M = matrix(0, nrow = length(a), ncol = ncol(B)), B = diag(1),
+  a = rep(1, 2), A = diag(length(a)))
 }
 \arguments{
 \item{X}{matrix-point, argument for density function}
@@ -18,7 +18,7 @@ dtdf(X, M = matrix(0), B = diag(ncol(M)), a = rep(1, nrow(M)),
 \item{A}{scale matrix for underlying gamma Bellman distribution (r x r)}
 }
 \value{
-array of generated matrix t (n x r x s)
+scalar, value of density function
 }
 \description{
 Density of matrix t distribution with vector degrees of freedom
@@ -29,7 +29,7 @@ is described in Shvedov
 generalisation of Algorithm by Alexey Balaev
 }
 \examples{
-d <- dtdf(X = matrix(1, nrow=3, ncol=2), M = matrix(0, nrow=3, ncol=2))
+d <- dtdf(X = matrix(1, nrow=3, ncol=1), a = c(1, 2, 3))
 d
 }
 

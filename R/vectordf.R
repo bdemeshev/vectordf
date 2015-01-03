@@ -193,19 +193,47 @@ dmatnorm <- function(X, M = matrix(0), U = diag(nrow(M)), V = diag(ncol(M))){
 #' @param B among-column scale covariance matrix for underlying standard normal (s x s)
 #' @param M matrix of expected values (r x s)
 #' @export
-#' @return array of generated matrix t (n x r x s)
+#' @return scalar, value of density function
 #' @examples
-#' d <- dtdf(X = matrix(1, nrow=3, ncol=2), M = matrix(0, nrow=3, ncol=2))
+#' d <- dtdf(X = matrix(1, nrow=3, ncol=1), a = c(1, 2, 3))
 #' d
-dtdf <- function(X, M = matrix(0), B = diag(ncol(M)), 
-                 a = rep(1, nrow(M)), A = diag(nrow(M)) ){
+dtdf <- function(X, M = matrix(0, nrow=length(a), ncol=ncol(B)), B = diag(1), 
+                 a = rep(1, 2), A = diag(length(a)) ){
   
-  P <- t(chol(A))
+  P <- t(chol(A)) # lower triangular matrix
   Z <- solve(P) %*% (X - M) # standartized matrix t distribution
   
   
   r <- nrow(M)
   s <- ncol(M)
+  
+  message("Not yet implemented")
+  
+  return(FALSE)  
+}
+
+
+
+#' Density of matrix gamma distribution with vector degrees of freedom
+#'
+#' Density of matrix gamma distribution with vector degrees of freedom
+#'
+#' Density of matrix gamma distribution with vector degrees of freedom. The distribution
+#' is described in Shvedov 
+#' generalisation of Algorithm by Alexey Balaev
+#'
+#' @param X matrix-point, argument for density function (r x r)
+#' @param a vector of degrees of freedom for underlying gamma Bellman distribution (r x 1)
+#' @param A scale matrix for underlying gamma Bellman distribution (r x r)
+#' @export
+#' @return scalar, value of density function
+#' @examples
+#' d <- dgammadf(X = matrix(1, nrow=2, ncol=2), a=c(1,2))
+#' d
+dgammadf <- function(X,  
+                 a = rep(1, 2), A = diag(length(a)) ){
+  
+  P <- t(chol(A)) # lower triangular matrix
   
   message("Not yet implemented")
   
