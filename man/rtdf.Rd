@@ -29,7 +29,7 @@ is described in Shvedov
 generalisation of Algorithm by Alexey Balaev
 }
 \examples{
-X <- rtdf(n = 5, M = matrix(0, nrow=3, ncol=2))
+X <- rtdf(n = 5, a = c(1, 2, 3))
 X
 }
 

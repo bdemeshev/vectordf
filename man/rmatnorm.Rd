@@ -24,7 +24,7 @@ Generate Matrix Normal distribution
 Generate Matrix Normal distribution using Wikipedia notations. Default is just scalar N(0,1).
 }
 \examples{
-X <- rmatnorm(n = 5, Mu = matrix(0, nrow=3, ncol=2))
+X <- rmatnorm(n = 5, M = matrix(0, nrow=3, ncol=2))
 X
 }
 

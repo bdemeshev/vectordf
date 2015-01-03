@@ -3,12 +3,12 @@
 \alias{dmatnorm}
 \title{Matrix Normal density function}
 \usage{
-dmatnorm(X, Mu = matrix(0), U = diag(nrow(Mu)), V = diag(ncol(Mu)))
+dmatnorm(X, M = matrix(0), U = diag(nrow(M)), V = diag(ncol(M)))
 }
 \arguments{
 \item{X}{matrix-point, argument for density function}
 
-\item{Mu}{matrix of expected values (r x s)}
+\item{M}{matrix of expected values (r x s)}
 
 \item{U}{among-row scale covariance matrix (r x r)}
 
@@ -24,7 +24,7 @@ Matrix Normal density function
 Matrix Normal density function
 }
 \examples{
-d <- dmatnorm(X = matrix(1, nrow=3, ncol=2), Mu = matrix(0, nrow=3, ncol=2))
+d <- dmatnorm(X = matrix(1, nrow=3, ncol=2), M = matrix(0, nrow=3, ncol=2))
 d
 }
 

@@ -29,7 +29,7 @@ is described in Shvedov
 generalisation of Algorithm by Alexey Balaev
 }
 \examples{
-d <- dtdf(X = matrix(1, nrow=3, ncol=2), Mu = matrix(0, nrow=3, ncol=2))
+d <- dtdf(X = matrix(1, nrow=3, ncol=2), M = matrix(0, nrow=3, ncol=2))
 d
 }
 

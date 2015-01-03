@@ -24,7 +24,7 @@ is described in Shvedov
 Algorithm by Alexey Balaev
 }
 \examples{
-X <- rgammadf(n = 5, Mu = matrix(0, nrow=3, ncol=2))
+X <- rgammadf(n = 5, a = c(1, 2, 3))
 X
 }
 

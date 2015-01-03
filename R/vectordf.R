@@ -157,7 +157,7 @@ rtdf <- function(n = 1, M = matrix(0, nrow=length(a), ncol=ncol(B)), B = diag(1)
 #' Matrix Normal density function 
 #'
 #' @param X matrix-point, argument for density function
-#' @param Mu matrix of expected values (r x s)
+#' @param M matrix of expected values (r x s)
 #' @param U among-row scale covariance matrix (r x r)
 #' @param V among-column scale covariance matrix (s x s)
 #' @export
@@ -166,7 +166,7 @@ rtdf <- function(n = 1, M = matrix(0, nrow=length(a), ncol=ncol(B)), B = diag(1)
 #' d <- dmatnorm(X = matrix(1, nrow=3, ncol=2), M = matrix(0, nrow=3, ncol=2))
 #' d
 dmatnorm <- function(X, M = matrix(0), U = diag(nrow(M)), V = diag(ncol(M))){
-  # Mu, U, V should be matrices!!! (if scalar, then 1x1)
+  # M, U, V should be matrices!!! (if scalar, then 1x1)
   r <- nrow(M)
   s <- ncol(M)
   
