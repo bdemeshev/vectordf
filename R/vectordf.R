@@ -94,10 +94,13 @@ rgammadf <- function(n=1, a = rep(1,2), A = diag(length(a))){
   for (i in 1:n) {
     L0[lower.tri(L0)] <- rnorm(r*(r-1)/2, mean=0, sd=1/sqrt(2))
     
-    diag(L0) <- flexsurv::rgengamma(n = r, mu = (log(d)-log(2))/2, 
-                                    sigma = 1/sqrt(d*2),
-                                    Q = sqrt(2/d))
-        
+    # diag(L0) <- flexsurv::rgengamma(n = r, mu = (log(d)-log(2))/2, 
+    #                                sigma = 1/sqrt(d*2),
+    #                                Q = sqrt(2/d))
+    
+    # a little bit faster :)
+    diag(L0) <- sqrt(rgamma(n = r, shape = d/2, rate = 1))
+    
     W0 <- t(L0) %*% L0 # gamma-Bellman (a, I)
     ans[i,,] <- t(Pinv) %*% W0 %*% Pinv # gamma-Bellman (a, A)
   }
@@ -142,9 +145,12 @@ rtdf <- function(n = 1, M = matrix(0, nrow=length(a), ncol=ncol(B)), B = diag(1)
     L0[lower.tri(L0)] <- rnorm(r*(r-1)/2, mean=0, sd=1/sqrt(2))
     
     
-    diag(L0) <- flexsurv::rgengamma(n = r, mu = (log(d)-log(2))/2, 
-                                    sigma = 1/sqrt(d*2),
-                                    Q = sqrt(2/d))
+    # diag(L0) <- flexsurv::rgengamma(n = r, mu = (log(d)-log(2))/2, 
+    #                                sigma = 1/sqrt(d*2),
+    #                                Q = sqrt(2/d))
+    
+    # a little bit faster :)
+    diag(L0) <- sqrt(rgamma(n = r, shape = d/2, rate = 1))
     
     # Shvedov, WP2/2010/01, page 8
     vecZ <- mvtnorm::rmvnorm(n=1, mean = rep(0, r*s), sigma = kronecker(diag(r), B))
