@@ -81,22 +81,26 @@ rmatnorm <- function(n=1, M = matrix(0), U = diag(nrow(M)), V = diag(ncol(M))){
 #' X
 rgammadf <- function(n=1, a = rep(1,2), A = diag(length(a))){
   r <- length(a)
-  
+
+  ans <- array(0, dim = c(n, r, r))
   # Balaev, phd thesis, page 116  
-  L0 <- matrix(0, nrow=r, ncol=r)
-  L0[lower.tri(L0)] <- rnorm(r*(r-1)/2, mean=0, sd=1/sqrt(2))
-  
-  d <- 2*a[r:1] - r + 1:r # a = 1, p = 2
-  diag(L0) <- flexsurv::rgengamma(n = r, mu = (log(d)-log(2))/2, 
-                                  sigma = 1/sqrt(d*2),
-                                  Q = sqrt(2/d))
-    
   P <- t(chol(A))
   Pinv <- solve(P)
   
-  W0 <- t(L0) %*% L0 # gamma-Bellman (a, I)
-  W <- t(Pinv) %*% W0 %*% Pinv # gamma-Bellman (a, A)
-  return(W)
+  L0 <- matrix(0, nrow=r, ncol=r)
+  
+  for (i in 1:n) {
+    L0[lower.tri(L0)] <- rnorm(r*(r-1)/2, mean=0, sd=1/sqrt(2))
+    
+    d <- 2*a[r:1] - r + 1:r # a = 1, p = 2
+    diag(L0) <- flexsurv::rgengamma(n = r, mu = (log(d)-log(2))/2, 
+                                    sigma = 1/sqrt(d*2),
+                                    Q = sqrt(2/d))
+        
+    W0 <- t(L0) %*% L0 # gamma-Bellman (a, I)
+    ans[i,,] <- t(Pinv) %*% W0 %*% Pinv # gamma-Bellman (a, A)
+  }
+  return(ans)
 }
 
 
@@ -122,24 +126,27 @@ rtdf <- function(n = 1, M = matrix(0, nrow=length(a), ncol=ncol(B)), B = diag(1)
                  a = rep(1, 2), A = diag(length(a)) ){
   r <- nrow(M)
   s <- ncol(M)
-  
-  # Balaev, phd thesis, page 116
-  L0 <- matrix(0, nrow=r, ncol=r)
-  L0[lower.tri(L0)] <- rnorm(r*(r-1)/2, mean=0, sd=1/sqrt(2))
-
-  d <- 2*a[r:1] - r + 1:r # a = 1, p = 2
-  diag(L0) <- flexsurv::rgengamma(n = r, mu = (log(d)-log(2))/2, 
-                                  sigma = 1/sqrt(d*2),
-                                  Q = sqrt(2/d))
-  
-  # Shvedov, WP2/2010/01, page 8
-  vecZ <- rmvnorm(n=1, mean = rep(0, r*s), sigma = kronecker(diag(r), B))
-  Z <- matrix(vecZ, nrow=r)
-  
+  ans <- array(0, dim = c(n, r, s))
   P <- t(chol(A))
-  U <- P %*% solve(L0) %*% Z + M
   
-  return(U)
+  L0 <- matrix(0, nrow=r, ncol=r)
+  for (i in 1:n) {
+    # Balaev, phd thesis, page 116    
+    L0[lower.tri(L0)] <- rnorm(r*(r-1)/2, mean=0, sd=1/sqrt(2))
+    
+    d <- 2*a[r:1] - r + 1:r # a = 1, p = 2
+    diag(L0) <- flexsurv::rgengamma(n = r, mu = (log(d)-log(2))/2, 
+                                    sigma = 1/sqrt(d*2),
+                                    Q = sqrt(2/d))
+    
+    # Shvedov, WP2/2010/01, page 8
+    vecZ <- rmvnorm(n=1, mean = rep(0, r*s), sigma = kronecker(diag(r), B))
+    Z <- matrix(vecZ, nrow=r)
+    
+    
+    ans[i,,] <- P %*% solve(L0) %*% Z + M
+  }
+  return(ans)
 }
 
 
