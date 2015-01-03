@@ -13,26 +13,26 @@ NULL
 #' Generate Discrete Markov Chain given transition matrix
 #'
 #' @param trans square transition matrix
-#' @param N number of states to generate
+#' @param n number of states to generate
 #' @param start either a starting state (default is state 1) or a vector of probabilities for starting state
 #' @export
 #' @return integer vector of simulated states
 #' @examples
-#' P <- 0.6*diag(3) + matrix(0.2, nrow=3, ncol=3)
-#' mc <- mc_sim(P, N=100)
+#' P <- 0.7*diag(3) + 0.1
+#' mc <- mc_sim(P, n=100)
 #' mc
-mc_sim <- function(trans, N=1, start=1) {
+mc_sim <- function(trans, n=1, start=1) {
   n_states <- ncol(trans) # determine the number of states
   
-  sim <- rep(1, N) # reserve space for state sequence
+  sim <- rep(1, n) # reserve space for state sequence
   if (length(start)>1) {
     sim[1] <- sample(x = n_states, size = 1, prob = start) # starting state probabilities
   } else {
     sim[1] <- start # number of starting state
   }
   
-  if (N>1) # do simulations
-    for (i in 2:N) 
+  if (n>1) # do simulations
+    for (i in 2:n) 
       sim[i] <- sample(x = n_states, size = 1, prob = trans[sim[i-1],])
   
   return(sim)

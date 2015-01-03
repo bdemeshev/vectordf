@@ -3,12 +3,12 @@
 \alias{mc_sim}
 \title{Generate Discrete Markov Chain}
 \usage{
-mc_sim(trans, N = 1, start = 1)
+mc_sim(trans, n = 1, start = 1)
 }
 \arguments{
 \item{trans}{square transition matrix}
 
-\item{N}{number of states to generate}
+\item{n}{number of states to generate}
 
 \item{start}{either a starting state (default is state 1) or a vector of probabilities for starting state}
 }
@@ -22,8 +22,8 @@ Generate Discrete Markov Chain
 Generate Discrete Markov Chain given transition matrix
 }
 \examples{
-P <- 0.6*diag(3) + matrix(0.2, nrow=3, ncol=3)
-mc <- mc_sim(P, N=100)
+P <- 0.7*diag(3) + 0.1
+mc <- mc_sim(P, n=100)
 mc
 }
 
